@@ -267,6 +267,130 @@ void st_go_idle()
   else { STEPPERS_DISABLE_PORT &= ~(1<<STEPPERS_DISABLE_BIT); }
 }
 
+// B (digital pin 8 to 13)
+// C (analog input pins)
+// D (digital pins 0 to 7)
+
+#define STEPPER_X_A1  (0x01<<PIND2) 
+#define STEPPER_X_A2  (0x01<<PIND3) 
+#define STEPPER_X_B1  (0x01<<PIND4) 
+#define STEPPER_X_B2  (0x01<<PIND5) 
+
+#define STEPPER_Y_A1  (0x01<<PIND6) 
+#define STEPPER_Y_A2  (0x01<<PIND7) 
+#define STEPPER_Y_B1  (0x01<<PINB0) 
+#define STEPPER_Y_B2  (0x01<<PINB4)
+
+/*#define STEPPER_Z_A1  (0x01<<PINC0) 
+#define STEPPER_Z_A2  (0x01<<PINC1) 
+#define STEPPER_Z_B1  (0x01<<PINC2) 
+#define STEPPER_Z_B2  (0x01<<PINC3)*/
+
+//#define STEPPING_PORT_Z   PORTC
+#define STEPPING_PORT_Y0   PORTD
+#define STEPPING_PORT_Y1   PORTB
+#define STEPPING_PORT_X    PORTD
+
+//#define STEPPING_DDR_Z    DDRC
+//#define STEPPING_DDR_Y    DDRD
+//#define STEPPING_DDR_X    DDRB
+
+#define ALL_STEPPER_PINS_X (STEPPER_X_A1|STEPPER_X_A2|STEPPER_X_B1|STEPPER_X_B2)
+#define ALL_STEPPER_PINS_Y (STEPPER_Y_A1|STEPPER_Y_A2|STEPPER_Y_B1|STEPPER_Y_B2)
+//#define ALL_STEPPER_PINS_Z (STEPPER_Z_A1 |STEPPER_Z_A2|STEPPER_Z_B1|STEPPER_Z_B2)
+
+const int stepper_pins[2][4] = {
+{STEPPER_X_A1, STEPPER_X_A2, STEPPER_X_B1, STEPPER_X_B2},
+{STEPPER_Y_A1, STEPPER_Y_A2, STEPPER_Y_B1, STEPPER_Y_B2},
+//{STEPPER_Z_A1, STEPPER_Z_A2, STEPPER_Z_B1, STEPPER_Z_B2},
+};
+
+void convert_step(){
+    static unsigned int crrnt_step_x = 0;
+    static unsigned int crrnt_step_y = 0;
+
+    //st.dir_outbits, st.step_outbits
+                    
+    if(st.step_outbits & (1<<X_STEP_BIT)) {
+
+        if(st.dir_outbits & (1<<X_DIRECTION_BIT)) {
+            crrnt_step_x ++;
+            if (crrnt_step_x >= 4)
+            crrnt_step_x = 0;
+        }
+        else{
+            if(crrnt_step_x == 0)
+            crrnt_step_x = 4;
+            crrnt_step_x --;      
+        }
+        
+        switch(crrnt_step_x) {
+            case 0:
+                STEPPING_PORT_X &= ~(stepper_pins[X_AXIS][0]|stepper_pins[X_AXIS][2]);
+                STEPPING_PORT_X |= stepper_pins[X_AXIS][3] | stepper_pins[X_AXIS][1];
+                break;
+            case 1:     
+                STEPPING_PORT_X &= ~(stepper_pins[X_AXIS][1] | stepper_pins[X_AXIS][2]);
+                STEPPING_PORT_X |= stepper_pins[X_AXIS][0] | stepper_pins[X_AXIS][3];
+                break;
+            case 2:       
+                STEPPING_PORT_X &= ~(stepper_pins[X_AXIS][1] | stepper_pins[X_AXIS][3]);
+                STEPPING_PORT_X |= stepper_pins[X_AXIS][2] | stepper_pins[X_AXIS][0];
+                break;
+            case 3: 
+                STEPPING_PORT_X &= ~(stepper_pins[X_AXIS][0] | stepper_pins[X_AXIS][3]);
+                STEPPING_PORT_X |= (stepper_pins[X_AXIS][1] | stepper_pins[X_AXIS][2]);
+                break;
+            return;
+        }
+    }
+    
+    if(st.step_outbits & (1<<Y_STEP_BIT)) {
+        
+        if(st.dir_outbits & (1<<Y_DIRECTION_BIT)) {
+            crrnt_step_y ++;
+            if (crrnt_step_y >= 4)
+            crrnt_step_y = 0;
+        }
+        else{
+            if(crrnt_step_y == 0)
+            crrnt_step_y = 4;
+            crrnt_step_y --;      
+        }
+        
+        switch(crrnt_step_y) {
+            case 0:                          
+                STEPPING_PORT_Y0 &= ~(stepper_pins[Y_AXIS][0]);
+                STEPPING_PORT_Y0 |= stepper_pins[Y_AXIS][1];
+                
+                STEPPING_PORT_Y1 &= ~(stepper_pins[Y_AXIS][2]);
+                STEPPING_PORT_Y1 |= stepper_pins[Y_AXIS][3];
+                break;
+            case 1:                               
+                STEPPING_PORT_Y0 &= ~(stepper_pins[Y_AXIS][1]);
+                STEPPING_PORT_Y0 |= stepper_pins[Y_AXIS][0];
+                
+                STEPPING_PORT_Y1 &= ~(stepper_pins[Y_AXIS][2]);
+                STEPPING_PORT_Y1 |= stepper_pins[Y_AXIS][3];
+                break;
+            case 2:                                 
+                STEPPING_PORT_Y0 &= ~(stepper_pins[Y_AXIS][1]);
+                STEPPING_PORT_Y0 |= stepper_pins[Y_AXIS][0];
+                
+                STEPPING_PORT_Y1 &= ~(stepper_pins[Y_AXIS][3]);
+                STEPPING_PORT_Y1 |= stepper_pins[Y_AXIS][2];
+                break;
+            case 3:                           
+                STEPPING_PORT_Y0 &= ~(stepper_pins[Y_AXIS][0]);
+                STEPPING_PORT_Y0 |= (stepper_pins[Y_AXIS][1]);
+                
+                STEPPING_PORT_Y1 &= ~(stepper_pins[Y_AXIS][3]);
+                STEPPING_PORT_Y1 |= (stepper_pins[Y_AXIS][2]);
+                break;
+            return;
+        }              
+    }
+}
 
 /* "The Stepper Driver Interrupt" - This timer interrupt is the workhorse of Grbl. Grbl employs
    the venerable Bresenham line algorithm to manage and exactly synchronize multi-axis moves.
@@ -321,9 +445,9 @@ ISR(TIMER1_COMPA_vect)
   if (busy) { return; } // The busy-flag is used to avoid reentering this interrupt
 
   // Set the direction pins a couple of nanoseconds before we step the steppers
-  DIRECTION_PORT = (DIRECTION_PORT & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK);
+  //DIRECTION_PORT = (DIRECTION_PORT & ~DIRECTION_MASK) | (st.dir_outbits & DIRECTION_MASK);
   #ifdef ENABLE_DUAL_AXIS
-    DIRECTION_PORT_DUAL = (DIRECTION_PORT_DUAL & ~DIRECTION_MASK_DUAL) | (st.dir_outbits_dual & DIRECTION_MASK_DUAL);
+    //DIRECTION_PORT_DUAL = (DIRECTION_PORT_DUAL & ~DIRECTION_MASK_DUAL) | (st.dir_outbits_dual & DIRECTION_MASK_DUAL);
   #endif
 
   // Then pulse the stepping pins
@@ -333,9 +457,10 @@ ISR(TIMER1_COMPA_vect)
       st.step_bits_dual = (STEP_PORT_DUAL & ~STEP_MASK_DUAL) | st.step_outbits_dual;
     #endif
   #else  // Normal operation
-    STEP_PORT = (STEP_PORT & ~STEP_MASK) | st.step_outbits;
+    convert_step();
+    //STEP_PORT = (STEP_PORT & ~STEP_MASK) | st.step_outbits;
     #ifdef ENABLE_DUAL_AXIS
-      STEP_PORT_DUAL = (STEP_PORT_DUAL & ~STEP_MASK_DUAL) | st.step_outbits_dual;
+      //STEP_PORT_DUAL = (STEP_PORT_DUAL & ~STEP_MASK_DUAL) | st.step_outbits_dual;
     #endif
   #endif
 
@@ -489,10 +614,10 @@ ISR(TIMER1_COMPA_vect)
 ISR(TIMER0_OVF_vect)
 {
   // Reset stepping pins (leave the direction pins)
-  STEP_PORT = (STEP_PORT & ~STEP_MASK) | (step_port_invert_mask & STEP_MASK);
+  /*STEP_PORT = (STEP_PORT & ~STEP_MASK) | (step_port_invert_mask & STEP_MASK);
   #ifdef ENABLE_DUAL_AXIS
     STEP_PORT_DUAL = (STEP_PORT_DUAL & ~STEP_MASK_DUAL) | (step_port_invert_mask_dual & STEP_MASK_DUAL);
-  #endif
+  #endif*/
   TCCR0B = 0; // Disable Timer0 to prevent re-entering this interrupt when it's not needed.
 }
 #ifdef STEP_PULSE_DELAY
@@ -503,10 +628,11 @@ ISR(TIMER0_OVF_vect)
   // st_wake_up() routine.
   ISR(TIMER0_COMPA_vect)
   {
-    STEP_PORT = st.step_bits; // Begin step pulse.
-    #ifdef ENABLE_DUAL_AXIS
-      STEP_PORT_DUAL = st.step_bits_dual;
-    #endif
+    //STEP_PORT = st.step_bits; // Begin step pulse
+    convert_step();
+    //#ifdef ENABLE_DUAL_AXIS
+    //  STEP_PORT_DUAL = st.step_bits_dual;
+    //#endif
   }
 #endif
 
@@ -551,14 +677,14 @@ void st_reset()
   st.dir_outbits = dir_port_invert_mask; // Initialize direction bits to default.
 
   // Initialize step and direction port pins.
-  STEP_PORT = (STEP_PORT & ~STEP_MASK) | step_port_invert_mask;
-  DIRECTION_PORT = (DIRECTION_PORT & ~DIRECTION_MASK) | dir_port_invert_mask;
+  /*STEP_PORT = (STEP_PORT & ~STEP_MASK) | step_port_invert_mask;
+  //DIRECTION_PORT = (DIRECTION_PORT & ~DIRECTION_MASK) | dir_port_invert_mask;
   
   #ifdef ENABLE_DUAL_AXIS
     st.dir_outbits_dual = dir_port_invert_mask_dual;
     STEP_PORT_DUAL = (STEP_PORT_DUAL & ~STEP_MASK_DUAL) | step_port_invert_mask_dual;
-    DIRECTION_PORT_DUAL = (DIRECTION_PORT_DUAL & ~DIRECTION_MASK_DUAL) | dir_port_invert_mask_dual;
-  #endif
+    //DIRECTION_PORT_DUAL = (DIRECTION_PORT_DUAL & ~DIRECTION_MASK_DUAL) | dir_port_invert_mask_dual;
+  #endif*/
 }
 
 
