@@ -52,7 +52,7 @@
   // Define stepper driver enable/disable output pin.
   #define STEPPERS_DISABLE_DDR    DDRB
   #define STEPPERS_DISABLE_PORT   PORTB
-  #define STEPPERS_DISABLE_BIT    0  // Uno Digital Pin 8
+  #define STEPPERS_DISABLE_BIT    10  // Disables: Uno Digital Pin 8
   #define STEPPERS_DISABLE_MASK   (1<<STEPPERS_DISABLE_BIT)
 
   // Define homing/hard limit switch input pins and limit interrupt vectors.
@@ -63,9 +63,9 @@
   #define X_LIMIT_BIT      1  // Uno Digital Pin 9
   #define Y_LIMIT_BIT      2  // Uno Digital Pin 10
   #ifdef VARIABLE_SPINDLE // Z Limit pin and spindle enabled swapped to access hardware PWM on Pin 11.
-    #define Z_LIMIT_BIT	   4 // Uno Digital Pin 12
+    #define Z_LIMIT_BIT	   14 // Disables: Uno Digital Pin 12
   #else
-    #define Z_LIMIT_BIT    3  // Uno Digital Pin 11
+    #define Z_LIMIT_BIT    13  // Disables: Uno Digital Pin 11
   #endif
   #if !defined(ENABLE_DUAL_AXIS)
     #define LIMIT_MASK     ((1<<X_LIMIT_BIT)|(1<<Y_LIMIT_BIT)|(1<<Z_LIMIT_BIT)) // All limit bits
