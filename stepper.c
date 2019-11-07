@@ -691,7 +691,7 @@ void st_reset()
 // Initialize and start the stepper motor subsystem
 void stepper_init()
 {
-  // Configure step and direction interface pins
+  /*// Configure step and direction interface pins
   STEP_DDR |= STEP_MASK;
   STEPPERS_DISABLE_DDR |= 1<<STEPPERS_DISABLE_BIT;
   DIRECTION_DDR |= DIRECTION_MASK;
@@ -699,7 +699,10 @@ void stepper_init()
   #ifdef ENABLE_DUAL_AXIS
     STEP_DDR_DUAL |= STEP_MASK_DUAL;
     DIRECTION_DDR_DUAL |= DIRECTION_MASK_DUAL;
-  #endif
+  #endif*/
+	
+  DDRD = DDRD | 0b11111100; // sets pins 2 to 7 as outputs
+  DDRB = DDRB | 0b00010001; // sets pins 0 (pin 8) and 4 (pin 12)
 
   // Configure Timer 1: Stepper Driver Interrupt
   TCCR1B &= ~(1<<WGM13); // waveform generation = 0100 = CTC
