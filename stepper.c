@@ -21,7 +21,6 @@
 
 #include "grbl.h"
 
-
 // Some useful constants.
 #define DT_SEGMENT (1.0/(ACCELERATION_TICKS_PER_SECOND*60.0)) // min/segment
 #define REQ_MM_INCREMENT_SCALAR 1.25
@@ -308,8 +307,6 @@ const int stepper_pins[2][4] = {
 void convert_step(){
     static unsigned int crrnt_step_x = 0;
     static unsigned int crrnt_step_y = 0;
-
-    //st.dir_outbits, st.step_outbits
                     
     if(st.step_outbits & (1<<X_STEP_BIT)) {
 
