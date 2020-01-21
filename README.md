@@ -4,6 +4,9 @@ Grbl is a no-compromise, high performance, low cost alternative to parallel-port
 
 More informations and files can be found here: http://xn--zabaaganionemiejsce-8fd.pl/arduino/h-grbl/
 
+Installation:
+Just extract H-Grbl library into libraries folder and use H-Grbl example file.
+
 
 If You like my work, please 
 

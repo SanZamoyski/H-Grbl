@@ -22,7 +22,7 @@
 #ifndef settings_h
 #define settings_h
 
-#include "grbl.h"
+#include "hgrbl.h"
 
 
 // Version of the EEPROM data. Will be used to migrate existing data from older versions of Grbl

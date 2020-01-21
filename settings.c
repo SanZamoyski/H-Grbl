@@ -19,7 +19,7 @@
   along with Grbl.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "grbl.h"
+#include "hgrbl.h"
 
 settings_t settings;
 

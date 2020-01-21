@@ -18,7 +18,7 @@
   along with Grbl.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "grbl.h"
+#include "hgrbl.h"
 
 
 // Inverts the probe pin state depending on user settings and probing cycle mode.

@@ -26,7 +26,7 @@
   methods to accomodate their needs.
 */
 
-#include "grbl.h"
+#include "hgrbl.h"
 
 
 // Internal report utilities to reduce flash with repetitive tasks turned into functions.

@@ -19,7 +19,7 @@
   along with Grbl.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "grbl.h"
+#include "hgrbl.h"
 
 
 // Execute linear motion in absolute millimeter coordinates. Feed rate given in millimeters/second

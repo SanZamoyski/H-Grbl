@@ -27,7 +27,7 @@
 
 #ifndef config_h
 #define config_h
-#include "grbl.h" // For Arduino IDE compatibility.
+#include "hgrbl.h" // For Arduino IDE compatibility.
 
 
 // Define CPU pin map and default settings.
