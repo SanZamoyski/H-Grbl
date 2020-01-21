@@ -7,8 +7,6 @@ By-- ╠╦╝╠╩╗╠╩╗ - 2016 Rakshith BK
 * Use modify distribute and do whatever you want
 * And even though this code will not launch any Nukes,
 * I'm not responsible for any destruction caused by it.!*
-*
-* For Details and working --
 */
 
 /*
@@ -16,8 +14,10 @@ By-- ╠╦╝╠╩╗╠╩╗ - 2016 Rakshith BK
 *
 * X-axis stepper --> 2, 3, 4, 5
 * Y-axis stepper --> 6, 7, 8, *12*
-* X, Y Limit --> 9, 10
+* X Limit --> 9
+* Y Limit --> 10
 * Laser --> 11
+* 
 * */
 
 #include "grbl.h"
