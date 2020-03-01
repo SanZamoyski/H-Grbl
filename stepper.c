@@ -282,7 +282,7 @@ void st_wake_up()
   TIMSK1 |= (1<<OCIE1A);
 }
 
-
+//TODO: Steppers disabled immediately.
 // Stepper shutdown
 void st_go_idle()
 {
@@ -310,24 +310,72 @@ void st_go_idle()
   
 }
 
+//TODO: PWM resolution change?
 void convert_step(){
     static unsigned int crrnt_step_x = 0;
     static unsigned int crrnt_step_y = 0;
+    const int arr_jump = 2;
+    
+    static uint8_t _steps[32][4] = {
+
+        {	0	,	0	,	1	,	0	},
+        {	1	,	205	,	1	,	5	},
+        {	1	,	157	,	1	,	19	},
+        {	1	,	113	,	1	,	43	},
+        {	1	,	75	,	1	,	75	},
+        {	1	,	43	,	1	,	113	},
+        {	1	,	19	,	1	,	157	},
+        {	1	,	5	,	1	,	205	},
+        {	1	,	0	,	1	,	255	},
+        {	1	,	5	,	0	,	50	},
+        {	1	,	19	,	0	,	98	},
+        {	1	,	43	,	0	,	142	},
+        {	1	,	75	,	0	,	180	},
+        {	1	,	113	,	0	,	212	},
+        {	1	,	157	,	0	,	236	},
+        {	1	,	205	,	0	,	250	},
+        {	1	,	255	,	0	,	255	},
+        {	0	,	50	,	0	,	250	},
+        {	0	,	98	,	0	,	236	},
+        {	0	,	142	,	0	,	212	},
+        {	0	,	180	,	0	,	180	},
+        {	0	,	212	,	0	,	142	},
+        {	0	,	236	,	0	,	98	},
+        {	0	,	250	,	0	,	50	},
+        {	0	,	255	,	0	,	0	},
+        {	0	,	250	,	1	,	205	},
+        {	0	,	236	,	1	,	157	},
+        {	0	,	212	,	1	,	113	},
+        {	0	,	180	,	1	,	75	},
+        {	0	,	142	,	1	,	43	},
+        {	0	,	98	,	1	,	19	},
+        {	0	,	50	,	1	,	5	}
+    };
                     
     if(st.step_outbits & (1<<X_STEP_BIT)) {
 
         if(st.dir_outbits & (1<<X_DIRECTION_BIT)) {
-            crrnt_step_x ++;
-            if (crrnt_step_x >= 4)
-            crrnt_step_x = 0;
+            crrnt_step_x += arr_jump;
+            //if (crrnt_step_x >= 4)
+            //crrnt_step_x = 0;
+            //mot_x.takestep(true);
         }
         else{
-            if(crrnt_step_x == 0)
-            crrnt_step_x = 4;
-            crrnt_step_x --;      
+            //if(crrnt_step_x == 0)
+            //crrnt_step_x = 4;
+            crrnt_step_x -= arr_jump;     
+            //mot_x.takestep(false); 
         }
         
-        switch(crrnt_step_x) {
+        crrnt_step_x %= 32;
+        
+        // use analogWrite to create pwm for each MOSFET
+        digitalWrite(2, _steps[crrnt_step_x][0]);
+        analogWrite(3, _steps[crrnt_step_x][1]);
+        digitalWrite(4, _steps[crrnt_step_x][2]);
+        analogWrite(5, _steps[crrnt_step_x][3]);
+        
+        /*switch(crrnt_step_x) {
             case 0:
                 STEPPING_PORT_X &= ~(stepper_pins[X_AXIS][0]|stepper_pins[X_AXIS][2]);
                 STEPPING_PORT_X |= stepper_pins[X_AXIS][3] | stepper_pins[X_AXIS][1];
@@ -345,23 +393,35 @@ void convert_step(){
                 STEPPING_PORT_X |= (stepper_pins[X_AXIS][1] | stepper_pins[X_AXIS][2]);
                 break;
             return;
-        }
+        }*/
     }
+    
+    //TODO: disable function repair
     
     if(st.step_outbits & (1<<Y_STEP_BIT)) {
         
         if(st.dir_outbits & (1<<Y_DIRECTION_BIT)) {
-            crrnt_step_y ++;
-            if (crrnt_step_y >= 4)
-            crrnt_step_y = 0;
+            crrnt_step_y += arr_jump;
+            //if (crrnt_step_y >= 4)
+            //crrnt_step_y = 0;
+            //mot_y.takestep(true);
         }
         else{
-            if(crrnt_step_y == 0)
-            crrnt_step_y = 4;
-            crrnt_step_y --;      
+            //if(crrnt_step_y == 0)
+            //crrnt_step_y = 4;
+            crrnt_step_y -= arr_jump;
+            //mot_x.takestep(false);      
         }
         
-        switch(crrnt_step_y) {
+        crrnt_step_y %= 32;
+        
+        // use analogWrite to create pwm for each MOSFET
+        digitalWrite(6, _steps[crrnt_step_y][0]);
+        analogWrite(7, _steps[crrnt_step_y][1]);
+        digitalWrite(8, _steps[crrnt_step_y][2]);
+        analogWrite(12, _steps[crrnt_step_y][3]);
+        
+        /*switch(crrnt_step_y) {
             case 0:                          
                 STEPPING_PORT_Y0 &= ~(stepper_pins[Y_AXIS][0]);
                 STEPPING_PORT_Y0 |= stepper_pins[Y_AXIS][1];
@@ -391,7 +451,7 @@ void convert_step(){
                 STEPPING_PORT_Y1 |= (stepper_pins[Y_AXIS][2]);
                 break;
             return;
-        }              
+        }   */           
     }
 }
 
