@@ -518,7 +518,23 @@ void report_realtime_status()
       }
     }
   }
-
+  
+  //This part sets spindle speed depending on Z-coord. It is turned off when 
+  //S0 or M5.
+  //Credits goes to langwadt [https://github.com/grbl/grbl/issues/1611]
+  float zpos;
+  zpos = sys_position[Z_AXIS]/settings.steps_per_mm[Z_AXIS] - wco[Z_AXIS];
+  //zpos -= gc_state.coord_system[Z_AXIS]+gc_state.coord_offset[Z_AXIS];
+  //zpos -= gc_state.tool_length_offset;
+   
+  if(spindle_get_state() != SPINDLE_STATE_DISABLE){
+    if(zpos <= 0){
+      SPINDLE_OCR_REGISTER = 255;
+    }else{
+      SPINDLE_OCR_REGISTER = 32;
+    }
+  }
+    
   // Report machine position
   if (bit_istrue(settings.status_report_mask,BITFLAG_RT_STATUS_POSITION_TYPE)) {
     printPgmString(PSTR("|MPos:"));
