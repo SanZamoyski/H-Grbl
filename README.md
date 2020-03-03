@@ -10,6 +10,8 @@ Just extract H-Grbl library into libraries folder and use H-Grbl example file.
 TODO: 
 * convert digital/analogWrite to port manipulations
 * repair disable steppers function - propably will be repaired by converting to port manipulation
+* $H to set X=0, Y=0, Z=10
+* check what in homing cycle can be problematic for X-microstepping
 
 
 If You like my work, please 
