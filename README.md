@@ -12,6 +12,7 @@ TODO:
 * repair disable steppers function - propably will be repaired by converting to port manipulation
 * $H to set X=0, Y=0, Z=10
 * check what in homing cycle can be problematic for X-microstepping
+* Put all settings in defaul settings file.
 
 
 If You like my work, please 
