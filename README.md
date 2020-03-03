@@ -7,6 +7,10 @@ More informations and files can be found here: http://xn--zabaaganionemiejsce-8f
 Installation:
 Just extract H-Grbl library into libraries folder and use H-Grbl example file.
 
+TODO: 
+* convert digital/analogWrite to port manipulations
+* repair disable steppers function - propably will be repaired by converting to port manipulation
+
 
 If You like my work, please 
 
