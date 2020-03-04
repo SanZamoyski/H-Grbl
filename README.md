@@ -18,8 +18,4 @@ DONE:
 * $H to set X=0, Y=0, Z=10 (motion_control.c, 258-260 lines)
 
 
-If You like my work, please 
-
-donate by PayPal: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=XS8G3MZ896XNQ&currency_code=EUR&source=url
-
-or directly: https://paypal.me/sanzamoyski
+If You like my work, please donate by PayPal https://paypal.me/sanzamoyski
