@@ -314,7 +314,7 @@ void st_go_idle()
 void convert_step(){
     static unsigned int crrnt_step_x = 0;
     static unsigned int crrnt_step_y = 0;
-    const int arr_jump = 4;
+    const int arr_jump = 2;
     
     static uint8_t _steps[32][4] = {
 
