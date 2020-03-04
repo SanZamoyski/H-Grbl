@@ -247,7 +247,7 @@ void mc_homing_cycle(uint8_t cycle_mask)
   plan_sync_position();
   
   // Set  gcode position to 0,0,10:
-  clear_vector(gc_state.coord_offset);
+  //clear_vector(gc_state.coord_offset);
   //gc_state.coord_offset[Y_AXIS] = 0;
   //TODO: It depends on MODE. See 1010-1042 lines of gcode.c:
   //    // [19. Go to predefined position, Set G10, or Set axis offsets ]:
@@ -255,7 +255,9 @@ void mc_homing_cycle(uint8_t cycle_mask)
   
   //gc_state.coord_system ?
   //gc_state.position ?
-  gc_state.coord_offset[Z_AXIS] = [0, 0, -3];
+  gc_state.coord_offset[X_AXIS] = -settings.homing_pulloff;
+  gc_state.coord_offset[Y_AXIS] = -settings.homing_pulloff;
+  gc_state.coord_offset[Z_AXIS] = -3;
 
   // If hard limits feature enabled, re-enable hard limits pin change register after homing cycle.
   limits_init();
