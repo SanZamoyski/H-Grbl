@@ -10,9 +10,12 @@ Just extract H-Grbl library into libraries folder and use H-Grbl example file.
 TODO: 
 * convert digital/analogWrite to port manipulations
 * repair disable steppers function - propably will be repaired by converting to port manipulation
-* $H to set X=0, Y=0, Z=10
 * check what in homing cycle can be problematic for X-microstepping
-* Put all settings in defaul settings file.
+* Put some settings in defaul settings file.
+* $H for non-modal/modal and other situations (motion_control.c, 252 line).
+
+DONE:
+* $H to set X=0, Y=0, Z=10 (motion_control.c, 258-260 lines)
 
 
 If You like my work, please 
