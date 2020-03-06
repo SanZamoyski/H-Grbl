@@ -527,9 +527,9 @@ void report_realtime_status()
   //zpos -= gc_state.coord_system[Z_AXIS]+gc_state.coord_offset[Z_AXIS];
   //zpos -= gc_state.tool_length_offset;
    
-  if(zpos <= 0){
+  if(zpos < 0){
     SPINDLE_OCR_REGISTER = 255;
-  }else{
+  }else if(zpos > 0){
     SPINDLE_OCR_REGISTER = 32;
   }
     

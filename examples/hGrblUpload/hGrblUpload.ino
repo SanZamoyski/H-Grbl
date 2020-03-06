@@ -39,10 +39,10 @@ By-- ╠╦╝╠╩╗╠╩╗ - 2016 Rakshith BK
 * Moved to v1.1 by San Zamoyski 2019-2020
 *
 * X-axis stepper --> 2, 3, 4, 5
-* Y-axis stepper --> 6, 7, 8, *12*
+* Y-axis stepper --> 6, 7, 8, *10*
 * X Limit --> 9
-* Y Limit --> 10
 * Laser --> 11
+* Y Limit --> 12
 * 
 * */
 

@@ -229,7 +229,7 @@ static st_prep_t prep;
 #define STEPPER_Y_A1  (0x01<<PIND6) 
 #define STEPPER_Y_A2  (0x01<<PIND7) 
 #define STEPPER_Y_B1  (0x01<<PINB0) 
-#define STEPPER_Y_B2  (0x01<<PINB4)
+#define STEPPER_Y_B2  (0x01<<PINB2)
 
 /*#define STEPPER_Z_A1  (0x01<<PINC0) 
 #define STEPPER_Z_A2  (0x01<<PINC1) 
@@ -308,6 +308,11 @@ void st_go_idle()
   STEPPING_PORT_Y0 &= ~(stepper_pins[Y_AXIS][0]|stepper_pins[Y_AXIS][1]);
   STEPPING_PORT_Y1 &= ~(stepper_pins[Y_AXIS][2]|stepper_pins[Y_AXIS][3]);
   
+        
+        //digitalWrite(3, 0);
+        //digitalWrite(5, 0);
+        //digitalWrite(7, 0);
+        //digitalWrite(10, 0);
 }
 
 //TODO: PWM resolution change?
@@ -419,7 +424,11 @@ void convert_step(){
         digitalWrite(6, _steps[crrnt_step_y][0]);
         analogWrite(7, _steps[crrnt_step_y][1]);
         digitalWrite(8, _steps[crrnt_step_y][2]);
-        analogWrite(12, _steps[crrnt_step_y][3]);
+        analogWrite(10, _steps[crrnt_step_y][3]);
+        //sbi(TCCR1A, COM1A1);
+        //pinMode(9, 1);
+        //TCCR1A |= (1<<COM1A1);
+        //OCR1B = _steps[crrnt_step_y][3];
         
         /*switch(crrnt_step_y) {
             case 0:                          
